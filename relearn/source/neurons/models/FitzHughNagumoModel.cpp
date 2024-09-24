@@ -59,55 +59,6 @@ void FitzHughNagumoModel::create_neurons(number_neurons_type creation_count) {
     init_neurons(old_size, creation_count);
 }
 
-void FitzHughNagumoModel::update_activity_benchmark(const NeuronID neuron_id) {
-    const auto synaptic_input = get_synaptic_input(neuron_id);
-    const auto background = get_background_activity(neuron_id);
-    const auto stimulus = get_stimulus(neuron_id);
-    const auto input = synaptic_input + background + stimulus;
-
-    const auto h = get_h();
-    const auto scale = 1.0 / h;
-
-    const auto local_neuron_id = neuron_id.get_neuron_id();
-
-    auto x_val = get_x(neuron_id);
-    auto w_val = w[local_neuron_id];
-
-    for (unsigned int integration_steps = 0; integration_steps < h; ++integration_steps) {
-        const auto x_increase = x_val - x_val * x_val * x_val * (1.0 / 3.0) - w_val + input;
-        const auto w_increase = phi * (x_val + a - b * w_val);
-
-        x_val += x_increase * scale;
-        w_val += w_increase * scale;
-    }
-
-    const auto spiked = w_val > x_val - x_val * x_val * x_val * (1.0 / 3.0) && x_val > 1.0;
-
-    if (spiked) {
-        set_fired(neuron_id, FiredStatus::Fired);
-    } else {
-        set_fired(neuron_id, FiredStatus::Inactive);
-    }
-
-    set_x(neuron_id, x_val);
-    w[local_neuron_id] = w_val;
-}
-
-void FitzHughNagumoModel::update_activity_benchmark() {
-    const auto number_local_neurons = get_number_neurons();
-    const auto disable_flags = get_extra_infos()->get_disable_flags();
-
-#pragma omp parallel for shared(disable_flags, number_local_neurons) default(none)
-    for (NeuronID::value_type neuron_id = 0U; neuron_id < number_local_neurons; ++neuron_id) {
-        if (disable_flags[neuron_id] == UpdateStatus::Disabled) {
-            continue;
-        }
-
-        NeuronID converted_id{ neuron_id };
-        update_activity_benchmark(converted_id);
-    }
-}
-
 void FitzHughNagumoModel::update_activity() {
     const auto number_local_neurons = get_number_neurons();
     const auto disable_flags = get_extra_infos()->get_disable_flags();
@@ -157,16 +108,4 @@ void FitzHughNagumoModel::init_neurons(const number_neurons_type start_id, const
         w[neuron_id.get_neuron_id()] = FitzHughNagumoModel::init_w;
         set_x(neuron_id, FitzHughNagumoModel::init_x);
     }
-}
-
-double FitzHughNagumoModel::iter_x(const double x, const double w, const double input) noexcept {
-    return x - x * x * x / 3 - w + input;
-}
-
-double FitzHughNagumoModel::iter_refraction(const double w, const double x) const noexcept {
-    return phi * (x + a - b * w);
-}
-
-bool FitzHughNagumoModel::spiked(const double x, const double w) noexcept {
-    return w > iter_x(x, 0, 0) && x > 1.;
 }

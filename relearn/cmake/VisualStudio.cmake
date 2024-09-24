@@ -1,17 +1,10 @@
-set(relearn_benchmark_additional_files "" CACHE INTERNAL "")
 set(relearn_harness_additional_files "" CACHE INTERNAL "")
 set(relearn_lib_additional_files "" CACHE INTERNAL "")
 set(relearn_tests_additional_files "" CACHE INTERNAL "")
 
-if(WIN32) # Benchmark
-	list(APPEND relearn_benchmark_additional_files "main.h")
-	list(APPEND relearn_benchmark_additional_files "AdapterNeuronModel.h")
-endif()
-	
 if(WIN32) # Harness
 	list(APPEND relearn_harness_additional_files "adapter/connector/ConnectorAdapter.h")
 	list(APPEND relearn_harness_additional_files "adapter/event/EventAdapter.h")
-	list(APPEND relearn_harness_additional_files "adapter/fast_multipole_method/FMMAdapter.h")
 	list(APPEND relearn_harness_additional_files "adapter/helper/RankNeuronIdAdapter.h")
 	list(APPEND relearn_harness_additional_files "adapter/interval/IntervalAdapter.h")
 	list(APPEND relearn_harness_additional_files "adapter/kernel/KernelAdapter.h")
@@ -26,7 +19,6 @@ if(WIN32) # Harness
 	list(APPEND relearn_harness_additional_files "adapter/simulation/SimulationAdapter.h")
 	list(APPEND relearn_harness_additional_files "adapter/stimulus/StimulusAdapter.h")
 	list(APPEND relearn_harness_additional_files "adapter/synaptic_elements/SynapticElementsAdapter.h")
-	list(APPEND relearn_harness_additional_files "adapter/tagged_id/NeuronIdAdapter.h")
 	list(APPEND relearn_harness_additional_files "adapter/timers/TimersAdapter.h")
 	
 	list(APPEND relearn_harness_additional_files "factory/background_factory.h")
@@ -56,13 +48,7 @@ if(WIN32) # Lib
 	list(APPEND relearn_lib_additional_files "algorithm/BarnesHutInternal/BarnesHutCell.h")
 	list(APPEND relearn_lib_additional_files "algorithm/BarnesHutInternal/BarnesHutInverted.h")
 	list(APPEND relearn_lib_additional_files "algorithm/BarnesHutInternal/BarnesHutInvertedCell.h")
-	list(APPEND relearn_lib_additional_files "algorithm/BarnesHutInternal/BarnesHutLocationAware.h")
-	
-	# FMMInternal
-	list(APPEND relearn_lib_additional_files "algorithm/FMMInternal/FastMultipoleMethods.h")
-	list(APPEND relearn_lib_additional_files "algorithm/FMMInternal/FastMultipoleMethodsBase.h")
-	list(APPEND relearn_lib_additional_files "algorithm/FMMInternal/FastMultipoleMethodsCell.h")
-	list(APPEND relearn_lib_additional_files "algorithm/FMMInternal/FastMultipoleMethodsInverted.h")
+
 	
 	# Internal
 	list(APPEND relearn_lib_additional_files "algorithm/Internal/AlgorithmImpl.h")
@@ -126,7 +112,6 @@ if(WIN32) # Lib
 	# input
 	list(APPEND relearn_lib_additional_files "neurons/input/BackgroundActivityCalculator.h")
 	list(APPEND relearn_lib_additional_files "neurons/input/BackgroundActivityCalculators.h")
-	list(APPEND relearn_lib_additional_files "neurons/input/FiredStatusApproximator.h")
 	list(APPEND relearn_lib_additional_files "neurons/input/FiredStatusCommunicationMap.h")
 	list(APPEND relearn_lib_additional_files "neurons/input/FiredStatusCommunicator.h")
 	list(APPEND relearn_lib_additional_files "neurons/input/Stimulus.h")
@@ -147,10 +132,8 @@ if(WIN32) # Lib
 	list(APPEND relearn_lib_additional_files "sim/SynapseLoader.h")
 	
 	# file
-	list(APPEND relearn_lib_additional_files "sim/file/FileSynapseLoader.h")
 	list(APPEND relearn_lib_additional_files "sim/file/MultipleFilesSynapseLoader.h")
 	list(APPEND relearn_lib_additional_files "sim/file/MultipleSubdomainsFromFile.h")
-	list(APPEND relearn_lib_additional_files "sim/file/SubdomainFromFile.h")
 	
 	# random
 	list(APPEND relearn_lib_additional_files "sim/random/BoxBasedRandomSubdomainAssignment.h")
@@ -179,7 +162,6 @@ if(WIN32) # Lib
 	list(APPEND relearn_lib_additional_files "util/Stack.h")
 	list(APPEND relearn_lib_additional_files "util/StatisticalMeasures.h")
 	list(APPEND relearn_lib_additional_files "util/StringUtil.h")
-	list(APPEND relearn_lib_additional_files "util/TaggedID.h")
 	list(APPEND relearn_lib_additional_files "util/Timers.h")
 	list(APPEND relearn_lib_additional_files "util/Utility.h")
 	list(APPEND relearn_lib_additional_files "util/Vec3.h")
@@ -196,7 +178,6 @@ if(WIN32) # Tests
 	list(APPEND relearn_tests_additional_files "cell/test_cell.h")	
 	list(APPEND relearn_tests_additional_files "connector/test_connector.h")	
 	list(APPEND relearn_tests_additional_files "event/test_event.h")	
-	list(APPEND relearn_tests_additional_files "fast_multipole_method/test_fast_multipole_method.h")	
 	list(APPEND relearn_tests_additional_files "helper/test_distant_neuron_request.h")
 	list(APPEND relearn_tests_additional_files "helper/test_rank_neuron_id.h")
 	list(APPEND relearn_tests_additional_files "helper/test_synapse_creation_request.h")

@@ -330,10 +330,6 @@ public:
 protected:
     virtual void update_activity() = 0;
 
-    virtual void update_activity_benchmark() {
-        update_activity();
-    }
-
     /**
      * @brief Provides a hook to initialize all neurons with local id in [start_id, end_id)
      *      This method exists because of the order of operations when creating neurons
@@ -514,17 +510,9 @@ public:
 protected:
     void update_activity() final;
 
-    void update_activity_benchmark() final;
-
     void init_neurons(number_neurons_type start_id, number_neurons_type end_id) final { }
 
 private:
-    [[nodiscard]] double iter_x(const double x, const double input) const noexcept {
-        return ((x_0 - x) / tau_x + input);
-    }
-
-    void update_activity_benchmark(NeuronID neuron_id);
-
     std::vector<unsigned int> refractory_time{}; // refractory time
 
     double x_0{ default_x_0 }; // Background or resting activity
@@ -715,18 +703,10 @@ public:
 protected:
     void update_activity() final;
 
-    void update_activity_benchmark() final;
-
     void init_neurons(number_neurons_type start_id, number_neurons_type end_id) final;
 
 private:
-    [[nodiscard]] double iter_x(double x, double u, double input) const noexcept;
-
     [[nodiscard]] double iter_refraction(double u, double x) const noexcept;
-
-    [[nodiscard]] bool spiked(double x) const noexcept;
-
-    void update_activity_benchmark(NeuronID neuron_id);
 
     std::vector<double> u{}; // membrane recovery
 
@@ -758,7 +738,7 @@ public:
     FitzHughNagumoModel() = default;
 
     /**
-     * @brief Constructs a new instance of type IzhikevichModel with 0 neurons and the passed values for all parameters.
+     * @brief Constructs a new instance of type FitzHughNagumoModel with 0 neurons and the passed values for all parameters.
      *      Does not check the parameters against the min and max values defined below in order to allow other values besides in the GUI
      * @param h See NeuronModel(...)
      * @param synaptic_input_calculator See NeuronModel(...)
@@ -860,19 +840,9 @@ public:
 protected:
     void update_activity() final;
 
-    void update_activity_benchmark() final;
-
     void init_neurons(number_neurons_type start_id, number_neurons_type end_id) final;
 
 private:
-    [[nodiscard]] static double iter_x(double x, double w, double input) noexcept;
-
-    [[nodiscard]] double iter_refraction(double w, double x) const noexcept;
-
-    [[nodiscard]] static bool spiked(double x, double w) noexcept;
-
-    void update_activity_benchmark(NeuronID neuron_id);
-
     std::vector<double> w{}; // recovery variable
 
     double a{ default_a };
@@ -1076,18 +1046,10 @@ public:
 protected:
     void update_activity() final;
 
-    void update_activity_benchmark() final;
-
     void init_neurons(number_neurons_type start_id, number_neurons_type end_id) final;
 
 private:
     [[nodiscard]] double f(double x) const noexcept;
-
-    [[nodiscard]] double iter_x(double x, double w, double input) const noexcept;
-
-    [[nodiscard]] double iter_refraction(double w, double x) const noexcept;
-
-    void update_activity_benchmark(NeuronID neuron_id);
 
     std::vector<double> w{}; // adaption variable
 
