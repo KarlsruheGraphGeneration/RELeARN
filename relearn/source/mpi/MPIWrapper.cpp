@@ -63,7 +63,11 @@ std::unique_ptr<MPI_Op> translate_reduce_function(const MPIWrapper::ReduceFuncti
 }
 
 void MPIWrapper::init(int argc, char** argv) {
-    MPI_Init_thread(&argc, &argv, MPI_THREAD_SERIALIZED, &thread_level_provided);
+    int initialized = 0;
+    MPI_Initialized(&initialized);
+    if (!static_cast<bool>(initialized)) {
+        MPI_Init_thread(&argc, &argv, MPI_THREAD_SERIALIZED, &thread_level_provided);
+    }
 
     init_globals();
 
@@ -365,7 +369,7 @@ void MPIWrapper::sync_window(MPIWindow::Window window_type) {
     RelearnException::check(error_code == MPI_SUCCESS, "MPIWrapper::unlock_window: Error code received: {}", error_code);
 }
 
-void MPIWrapper::finalize() {
+void MPIWrapper::finalize(bool finalize_mpi /*= true*/) {
     barrier();
     free_custom_function();
 
@@ -382,9 +386,10 @@ void MPIWrapper::finalize() {
             MPIWindow::mpi_windows[i].release();
         }
     }
-
-    const int error_code = MPI_Finalize();
-    RelearnException::check(error_code == 0, "MPIWrapper::finalize: Error code received: {}", error_code);
+    if (finalize_mpi) {
+        const int error_code = MPI_Finalize();
+        RelearnException::check(error_code == 0, "MPIWrapper::finalize: Error code received: {}", error_code);
+    }
 }
 
 // This combination function assumes that it's called with the correct MPI datatype

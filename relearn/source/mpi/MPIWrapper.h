@@ -505,9 +505,10 @@ public:
 
     /**
      * @brief Finalizes the local MPI implementation.
+     * @param finalize_mpi if MPI_Finalize should be called.
      * @exception Throws a RelearnException if an MPI error occurs
      */
-    static void finalize();
+  static void finalize(bool finalize_mpi = true);
 
     /**
      * Creates and initializes a new rma window
