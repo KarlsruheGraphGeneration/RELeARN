@@ -67,10 +67,10 @@ if(WIN32)
   # target_link_libraries(project_libraries INTERFACE boostorg::random)
 else()
   set(BOOST_ENABLE_CMAKE ON)
-  find_package(Boost REQUIRED COMPONENTS RANDOM CONFIG)
+  find_package(Boost REQUIRED CONFIG)
   # target_link_libraries(project_options INTERFACE Boost::random)
 
-  target_link_libraries(project_options INTERFACE Boost::random)
+  target_link_libraries(project_options INTERFACE Boost::headers)
 endif()
 
 # declaration
@@ -116,7 +116,7 @@ set_target_properties(range-v3 PROPERTIES INTERFACE_SYSTEM_INCLUDE_DIRECTORIES
                                           "${range-v3_includes}")
 target_link_libraries(project_libraries INTERFACE range-v3)
 
-target_link_libraries(project_options INTERFACE Boost::random)
+target_link_libraries(project_options INTERFACE Boost::headers)
 
 # set compile commands back to on
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
