@@ -67,7 +67,7 @@ if(WIN32)
   # target_link_libraries(project_libraries INTERFACE boostorg::random)
 else()
   set(BOOST_ENABLE_CMAKE ON)
-  find_package(Boost REQUIRED COMPONENTS RANDOM)
+  find_package(Boost REQUIRED COMPONENTS RANDOM CONFIG)
   # target_link_libraries(project_options INTERFACE Boost::random)
 
   target_link_libraries(project_options INTERFACE Boost::random)
